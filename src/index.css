@@ -1,0 +1,32 @@
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.app {
+  max-width: 500px;
+  margin: 10px auto;
+}
+
+.todo-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 5px;
+  border-bottom: 1px dashed lightgray;
+  align-items: baseline;
+}
+
+.todo-item:first-child {
+  border-top: 1px dashed lightgray;
+}
+
+.todo-item div.completed {
+  text-decoration: line-through;
+  color: lightgray;
+}
