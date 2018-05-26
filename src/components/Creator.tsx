@@ -1,14 +1,21 @@
 import * as React from 'react'
 import axios, { AxiosError } from 'axios'
+import { ActionCreators } from '../store/actions'
 import { Button, ControlGroup, InputGroup, Intent } from '@blueprintjs/core'
+import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 import { ITodo } from '../types'
+
+interface IProps {
+  updateTodo: (todo: ITodo) => any
+}
 
 interface IState {
   isLoading: boolean
   text: string
 }
 
-export default class Creator extends React.Component<{}, IState> {
+class Creator extends React.Component<IProps, IState> {
   state: IState = {
     isLoading: false,
     text: '',
@@ -24,6 +31,7 @@ export default class Creator extends React.Component<{}, IState> {
       .post<ITodo>('/todos/', { text })
       .then(response => {
         this.setState({ isLoading: false, text: '' })
+        this.props.updateTodo(response.data)
       })
       .catch((error: AxiosError) => {
         this.setState({ isLoading: false })
@@ -35,7 +43,16 @@ export default class Creator extends React.Component<{}, IState> {
     return (
       <div>
         <ControlGroup fill={true}>
-          <InputGroup value={text} onChange={this.onChange} />
+          <InputGroup
+            value={text}
+            onChange={this.onChange}
+            name="text"
+            onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => {
+              if (event.key === 'Enter') {
+                this.create()
+              }
+            }}
+          />
           <Button
             icon="add"
             style={{ maxWidth: '50px' }}
@@ -48,3 +65,9 @@ export default class Creator extends React.Component<{}, IState> {
     )
   }
 }
+
+const mapActions = (dispatch: Dispatch) => ({
+  updateTodo: (todo: ITodo) => dispatch(ActionCreators.todoUpdated.create(todo)),
+})
+
+export default connect(null, mapActions)(Creator)

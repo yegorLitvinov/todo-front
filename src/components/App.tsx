@@ -1,14 +1,16 @@
 import * as React from 'react'
-import Todo from './Todo'
+import AuthDialog from './AuthDialog'
+import Creator from './Creator'
+import Todos from './Todos'
 
-class App extends React.Component {
+export default class App extends React.Component {
   public render() {
     return (
       <div className="app">
-        <Todo />
+        <Creator />
+        <Todos />
+        <AuthDialog />
       </div>
     )
   }
 }
-
-export default App

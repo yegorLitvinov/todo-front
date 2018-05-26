@@ -1,7 +1,7 @@
 import * as React from 'react'
 import axios from 'axios'
 import { ActionCreators } from '../store/actions'
-import { Checkbox } from '@blueprintjs/core'
+import { Checkbox, EditableText, Intent } from '@blueprintjs/core'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { ITodo } from '../types'
@@ -9,6 +9,7 @@ import { ITodo } from '../types'
 interface IProps {
   todo: ITodo
   updateTodo: (todo: ITodo) => any
+  skeleton?: boolean
 }
 
 class Item extends React.Component<IProps, ITodo> {
@@ -16,22 +17,31 @@ class Item extends React.Component<IProps, ITodo> {
     ...this.props.todo,
   }
 
-  updateTodo() {
+  updateTodo = () => {
     axios
       .put<ITodo>(`/todos/${this.state.id}/`, this.state)
       .then(response => this.props.updateTodo(response.data))
   }
 
   render() {
-    const { completed } = this.state
+    const { completed, text } = this.state
+    const skeletonClassName = this.props.skeleton ? 'pt-skeleton' : ''
     return (
       <div className="todo-item">
         <Checkbox
           large={true}
           checked={completed}
           onChange={() => this.setState({ completed: !completed }, this.updateTodo)}
+          className={skeletonClassName}
         />
-        <div className={completed ? 'completed' : ''}>{this.state.text}</div>
+        <EditableText
+          onConfirm={this.updateTodo}
+          value={text}
+          className={skeletonClassName + (completed ? ' completed' : '')}
+          onChange={newText => this.setState({ text: newText })}
+          multiline={true}
+          intent={Intent.PRIMARY}
+        />
       </div>
     )
   }
