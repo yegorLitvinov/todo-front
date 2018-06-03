@@ -1,5 +1,5 @@
 export interface ITodo {
-  id: string
+  id: number
   text: string
   order: number
   completed: boolean
@@ -9,13 +9,13 @@ export interface ITodo {
 }
 
 export interface ITag {
-  id: string
+  id: number
   text: string
   createdAt: string
 }
 
 export interface IUser {
-  id: string
+  id: number
   email: string
   createdAt: string
 }

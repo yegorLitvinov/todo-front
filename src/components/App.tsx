@@ -1,14 +1,14 @@
 import * as React from 'react'
 import AuthDialog from './AuthDialog'
 import Creator from './Creator'
-import Todos from './Todos'
+import SortableTodos from './SortableTodos'
 
 export default class App extends React.Component {
   public render() {
     return (
       <div className="app">
         <Creator />
-        <Todos />
+        <SortableTodos />
         <AuthDialog />
       </div>
     )

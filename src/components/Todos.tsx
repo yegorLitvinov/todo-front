@@ -1,22 +1,22 @@
 import * as React from 'react'
 import axios from 'axios'
 import Item from './Item'
-import orderBy from 'lodash-es/orderBy'
-import values from 'lodash-es/values'
 import { ActionCreators } from '../store/actions'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IReduxState } from '../store/reducers'
 import { ITodo } from '../types'
+import { selectActiveTodosList, selectCompletedTodosList } from '../selectors'
 import { Tab, Tabs } from '@blueprintjs/core'
 
 const LOREM_STRINGS = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-  'Lorem ipsum dolor sit amet, consectetur adipiscing',
+  'Lorem ipsum dolor sit amet, consectetur elit',
+  'Lorem ipsum dolor sit amet, consectetur',
   'Lorem ipsum dolor sit amet, consectetur',
   'Lorem ipsum dolor sit amet',
   'Lorem ipsum dolor sit',
   'Lorem ipsum dolor',
+  'Lorem ipsum',
 ]
 
 enum TabId {
@@ -26,7 +26,8 @@ enum TabId {
 
 interface IProps {
   todosLoaded: (todos: ITodo[]) => any
-  todos: ITodo[]
+  activeTodos: ITodo[]
+  completedTodos: ITodo[]
   authenticated: boolean
 }
 
@@ -57,7 +58,7 @@ class Todo extends React.Component<IProps, IState> {
     } else {
       const todos = Array.from(Array(20).keys()).map(n => ({
         completed: this.state.selectedTabId === TabId.Completed,
-        id: n.toString(),
+        id: n,
         order: n,
         tag: '',
         text: LOREM_STRINGS[Math.floor(Math.random() * LOREM_STRINGS.length)],
@@ -72,8 +73,10 @@ class Todo extends React.Component<IProps, IState> {
 
   render() {
     const { selectedTabId } = this.state
+    const { activeTodos, completedTodos } = this.props
+    const todos = selectedTabId === 'Completed' ? completedTodos : activeTodos
     return (
-      <>
+      <div>
         <Tabs id="TabsExample" selectedTabId={selectedTabId} onChange={this.onTabChange}>
           <Tabs.Expander />
           <Tab id={TabId.Active} title={TabId.Active} panel={<div />} />
@@ -81,17 +84,25 @@ class Todo extends React.Component<IProps, IState> {
           <Tabs.Expander />
         </Tabs>
         <div>
-          {orderBy(this.props.todos, 'id', 'desc')
+          {todos
             .filter(todo => (selectedTabId === TabId.Completed ? todo.completed : !todo.completed))
-            .map(todo => <Item key={todo.id} todo={todo} skeleton={!this.props.authenticated} />)}
+            .map((todo, index) => (
+              <Item
+                key={todo.id}
+                index={todo.id}
+                todo={todo}
+                skeleton={!this.props.authenticated}
+              />
+            ))}
         </div>
-      </>
+      </div>
     )
   }
 }
 
 const mapState = (state: IReduxState) => ({
-  todos: values(state.todos),
+  activeTodos: selectActiveTodosList(state),
+  completedTodos: selectCompletedTodosList(state),
   authenticated: state.user !== null,
 })
 
