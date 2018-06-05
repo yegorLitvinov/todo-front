@@ -1,6 +1,7 @@
 import * as React from 'react'
 import axios from 'axios'
 import Item from './Item'
+import SortableWrapper from './SortableWrapper'
 import { ActionCreators } from '../store/actions'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
@@ -83,18 +84,13 @@ class Todo extends React.Component<IProps, IState> {
           <Tab id={TabId.Completed} title={TabId.Completed} panel={<div />} />
           <Tabs.Expander />
         </Tabs>
-        <div>
-          {todos
-            .filter(todo => (selectedTabId === TabId.Completed ? todo.completed : !todo.completed))
-            .map((todo, index) => (
-              <Item
-                key={todo.id}
-                index={todo.id}
-                todo={todo}
-                skeleton={!this.props.authenticated}
-              />
+        <SortableWrapper todos={todos}>
+          <div>
+            {todos.map((todo, index) => (
+              <Item key={todo.id} index={index} todo={todo} skeleton={!this.props.authenticated} />
             ))}
-        </div>
+          </div>
+        </SortableWrapper>
       </div>
     )
   }
@@ -110,4 +106,7 @@ const mapActions = (dispatch: Dispatch) => ({
   todosLoaded: (todos: ITodo[]) => dispatch(ActionCreators.todosLoaded.create(todos)),
 })
 
-export default connect(mapState, mapActions)(Todo)
+export default connect(
+  mapState,
+  mapActions,
+)(Todo)

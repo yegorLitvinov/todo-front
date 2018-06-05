@@ -9,7 +9,7 @@ import { SortableElement, SortableHandle } from 'react-sortable-hoc'
 
 interface IProps {
   todo: ITodo
-  updateTodo: (todo: ITodo) => any
+  todoUpdated: (todo: ITodo) => any
   skeleton?: boolean
 }
 
@@ -25,7 +25,7 @@ class Item extends React.Component<IProps, ITodo> {
   updateTodo = () => {
     axios
       .put<ITodo>(`/todos/${this.state.id}/`, this.state)
-      .then(response => this.props.updateTodo(response.data))
+      .then(response => this.props.todoUpdated(response.data))
   }
 
   render() {
@@ -52,7 +52,7 @@ class Item extends React.Component<IProps, ITodo> {
 }
 
 const mapActions = (dispatch: Dispatch) => ({
-  updateTodo: (todo: ITodo) => dispatch(ActionCreators.todoUpdated.create(todo)),
+  todoUpdated: (todo: ITodo) => dispatch(ActionCreators.todoUpdated.create(todo)),
 })
 
 export default SortableElement(connect(null, mapActions)(Item))

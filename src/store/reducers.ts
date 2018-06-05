@@ -14,13 +14,35 @@ const initialState: IReduxState = {
   tags: {},
 }
 
+const reorderTodos = (todos: { [id: string]: ITodo }, newTodo: ITodo) => {
+  const oldTodo = todos[newTodo.id]
+  const [oldOrder, newOrder] = [oldTodo.order, newTodo.order]
+  const [minOrder, maxOrder] = oldOrder < newOrder ? [oldOrder, newOrder] : [newOrder, oldOrder]
+  const sign = oldOrder < newOrder ? -1 : 1
+  Object.keys(todos)
+    .filter(id => todos[id].order >= minOrder && todos[id].order <= maxOrder)
+    .forEach(id => {
+      if (todos[id].order === oldOrder) {
+        todos[id].order = newOrder
+      } else {
+        todos[id].order += sign
+      }
+    })
+}
+
 export default (state = initialState, action: Action): IReduxState => {
   switch (action.type) {
     case ActionCreators.todosLoaded.type:
       return { ...state, todos: keyBy(action.payload, 'id') }
 
     case ActionCreators.todoUpdated.type:
-      return { ...state, todos: { ...state.todos, [action.payload.id]: action.payload } }
+      const todos = { ...state.todos }
+      const newTodo = action.payload
+      const oldTodo = todos[newTodo.id]
+      if (oldTodo.order !== newTodo.order) {
+        reorderTodos(state.todos, newTodo)
+      }
+      return { ...state, todos: { ...state.todos, [newTodo.id]: newTodo } }
 
     case ActionCreators.login.type:
       sessionStorage.setItem('user', JSON.stringify(action.payload))
