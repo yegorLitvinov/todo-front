@@ -39,7 +39,7 @@ export default (state = initialState, action: Action): IReduxState => {
       const todos = { ...state.todos }
       const newTodo = action.payload
       const oldTodo = todos[newTodo.id]
-      if (oldTodo.order !== newTodo.order) {
+      if (oldTodo && oldTodo.order !== newTodo.order) {
         reorderTodos(state.todos, newTodo)
       }
       return { ...state, todos: { ...state.todos, [newTodo.id]: newTodo } }
