@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Manager Your Todos",
+  "name": "React Redux Todo App",
   "icons": [
     {
       "src": "favicon.ico",

@@ -41,7 +41,7 @@ class Creator extends React.Component<IProps, IState> {
   render() {
     const { isLoading, text } = this.state
     return (
-      <div>
+      <div className="creator">
         <ControlGroup fill={true}>
           <InputGroup
             value={text}
@@ -70,4 +70,7 @@ const mapActions = (dispatch: Dispatch) => ({
   updateTodo: (todo: ITodo) => dispatch(ActionCreators.todoUpdated.create(todo)),
 })
 
-export default connect(null, mapActions)(Creator)
+export default connect(
+  null,
+  mapActions,
+)(Creator)

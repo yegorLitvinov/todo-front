@@ -9,7 +9,11 @@ body {
 
 .app {
   max-width: 500px;
-  margin: 10px auto;
+  margin: auto;
+}
+
+.creator {
+  margin: 5px 15px;
 }
 
 .todo-item {
@@ -17,9 +21,9 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
-  padding: 5px;
+  padding: 5px 15px;
   border-bottom: 1px dashed lightgray;
-  align-items: baseline;
+  align-items: center;
 }
 
 .todo-item:first-child {
@@ -29,4 +33,8 @@ body {
 .todo-item div.completed {
   text-decoration: line-through;
   color: lightgray;
+}
+
+.w-100 {
+  width: 100% !important;
 }
