@@ -4,7 +4,7 @@ import { createSelector } from 'reselect'
 import { IReduxState } from './store/reducers'
 
 export const selectTodos = (state: IReduxState) => state.todos
-const selectTodosList = createSelector(selectTodos, todos => orderBy(values(todos), 'order', 'asc'))
+const selectTodosList = createSelector(selectTodos, todos => orderBy(values(todos), 'order', 'desc'))
 export const selectCompletedTodosList = createSelector(selectTodosList, todos =>
   todos.filter(todo => todo.completed),
 )
